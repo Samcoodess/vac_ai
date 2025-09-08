@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const assetContainer = document.getElementById('asset-container');
     const commandListDiv = document.getElementById('command-list');
     const assetSelectionStatus = document.getElementById('asset-selection-status');
+    const operatorImg = document.getElementById('operator-img-container');
     const aiImg = document.getElementById('ai-img-container');
     const themeToggle = document.getElementById('theme-toggle');
     const tabs = document.querySelectorAll('.tab-btn');
@@ -193,17 +194,26 @@ document.addEventListener('DOMContentLoaded', () => {
         logContainer.scrollTop = logContainer.scrollHeight;
     };
 
-    const updateStatus = (message, type = 'info', glow = false) => {
+    const updateStatus = (message, type = 'info') => {
         statusDiv.textContent = `STATUS: ${message.toUpperCase()}`;
-        if (aiImg) aiImg.classList.toggle('glow', glow);
     };
 
     const highlightAsset = (assetId, isActive) => {
         const asset = assets.find(a => a.id === assetId);
         if (!asset) return;
+
+        // Highlight asset card and map marker
         const assetDiv = document.getElementById(assetId);
         if (assetDiv) assetDiv.classList.toggle('asset-glow', isActive);
         if (asset.marker && asset.marker._icon) asset.marker._icon.classList.toggle('marker-glow', isActive);
+
+        // Highlight command input images based on asset type
+        if (asset.type === 'drone' || asset.type === 'sensor') {
+            if(aiImg) aiImg.classList.toggle('glow', isActive);
+        } else if (asset.type === 'vehicle' || asset.type === 'soldier') {
+            if(operatorImg) operatorImg.classList.toggle('glow', isActive);
+        }
+
         if (isActive) {
             assetSelectionStatus.textContent = `${asset.name} SELECTED`;
             map.flyTo(asset.marker.getLatLng(), 16);
