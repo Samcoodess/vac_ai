@@ -1,2 +1,3 @@
 # vac_ai
-xTECH 2025
+This is a prototype for VAC_AI
+xTECH 2025.
